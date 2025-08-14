@@ -3,13 +3,19 @@ body{
     padding: 0;
     box-sizing: border-box;
     font-family: "Roboto", sans-serif;
-        font-weight: 400;
-        font-style: normal;
+    font-weight: 400;
+    font-style: normal;
 }
 img{
     max-width: 100%;
-    height: auto;
+    height: 150px;
+    object-fit: contain;
 }
-h1{
-    font-weight: 700;
+.dark-mode{
+    background-color: #121212;
+    color: white;
+}
+.dark-mode .car{
+    background-color: #1e1e1e;
+    color: white;
 }
