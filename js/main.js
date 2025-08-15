@@ -5,20 +5,20 @@ const themeIcon      = document.querySelector("#themeIcon");
 
 if(localStorage.getItem("theme") === "dark"){
     document.body.classList.add("dark-mode");
-    themeIcon.classList.replace("bi-moon-fill", "bi-sun-fill");
+    themeIcon.className = "bi bi-sun-fill text-warning";
 }
 
-toggleThemeBtn.addEventListener("click", () =>{
+toggleThemeBtn.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
 
     if(document.body.classList.contains("dark-mode")){
-        localStorage.setItem("theme","dark");
-        themeIcon.classList.replace("bi-moon-fill","bi-sun-fill");
+        localStorage.setItem("theme", "dark");
+        themeIcon.className = "bi bi-sun-fill text-warning";
     }else{
-        localStorage.setItem("theme","light");
-        themeIcon.classList.replace("bi-sun-fill","bi-moon-fill");
+        localStorage.setItem("theme", "light");
+        themeIcon.className = "bi bi-moon-fill text-primary";
     }
-});
+})
 
 const API_URL_RANDOM           = "https://api.thedogapi.com/v1/images/search?limit=4";
 const API_URL_FAVORITES        = "https://api.thedogapi.com/v1/favourites?&order=DESC";

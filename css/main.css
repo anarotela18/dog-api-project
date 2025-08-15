@@ -15,7 +15,9 @@ img{
     background-color: #121212;
     color: white;
 }
-.dark-mode .car{
-    background-color: #1e1e1e;
+.dark-mode .card,
+.dark-mode form{
+    background-color: #1f1f1f;
+    border: 1px solid white;
     color: white;
 }
