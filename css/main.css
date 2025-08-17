@@ -11,6 +11,19 @@ img{
     height: 150px;
     object-fit: contain;
 }
+.skeleton{
+    background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75% );
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+@keyframes skeleton-loading{
+    0%{
+        background-position: 200% 0;
+    }
+    100%{
+        background-position: -200% 0;
+    }
+}
 .dark-mode{
     background-color: #121212;
     color: white;
@@ -20,4 +33,7 @@ img{
     background-color: #1f1f1f;
     border: 1px solid white;
     color: white;
+}
+body.dark-mode .skeleton{
+    background: linear-gradient(90deg, #3a3a3a 25%, #505050 50%, #3a3a3a 75%);
 }

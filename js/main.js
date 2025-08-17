@@ -1,5 +1,3 @@
-AOS.init();
-
 const toggleThemeBtn = document.querySelector("#toggleTheme");
 const themeIcon      = document.querySelector("#themeIcon");
 
@@ -57,9 +55,13 @@ async function loadRandomDogImages(){
             const article = document.createElement("article");
 
             const img = document.createElement("img");
-            img.src = dog.url;
-            img.classList = "rounded";
+            img.classList = "rounded skeleton";
             img.alt = dog.id;
+
+            img.onload = () => {
+                img.classList.remove("skeleton");
+            }
+            img.src = dog.url;
 
             const button = document.createElement("button");
             button.classList = "btn btn-outline-success mt-3";
@@ -148,6 +150,11 @@ async function saveFavoriteDog(dogId) {
   }
 
 }
+
+let allFavorites = [];
+let currentIndex = 0;
+const pageSize = 4;
+
 async function loadFavoriteDogImages(){
     const res = await fetch(API_URL_FAVORITES,{
         headers: {
@@ -165,44 +172,67 @@ async function loadFavoriteDogImages(){
         <button type="button" class="btn-close float-end" onclick="this.parentElement.style.display='none'"></button>`;
     }else{
         const data = await res.json();
-        const favoriteImageSection = document.querySelector("#favorite-image-section");
-        favoriteImageSection.innerHTML = "";
+        if (data.length !== 0) {
+          allFavorites = data;
+          currentIndex = 0;
 
-        const divRow = document.createElement("div");
-        divRow.classList = "row";
-        if(data.length !== 0){
-            data.forEach((dogFavorite)=>{
-                const divColumn = document.createElement("div");
-                divColumn.classList = "col-12 col-xl-3 mx-auto mb-3";
+          const favoriteImageSection = document.querySelector("#favorite-image-section");
+          favoriteImageSection.innerHTML = "";
 
-                const divCard = document.createElement("div");
-                divCard.classList = "card shadow p-3";
+          const divRow = document.createElement("div");
+          divRow.classList = "row";
+          divRow.id = "favorites-row";
+          favoriteImageSection.appendChild(divRow);
 
-                const article = document.createElement("article");
-                const img = document.createElement("img");
-                img.src = dogFavorite.image.url;
-                img.alt = dogFavorite.id;
-                img.classList = "rounded";
-                const button = document.createElement("button");
-                button.classList = "btn btn-outline-danger mt-3";
-                button.innerHTML = `Remove dog of favorites`;
-                button.onclick = () => deleteDogOfFavorites(dogFavorite.id);
-
-                article.appendChild(img);
-                article.appendChild(button);
-                divCard.appendChild(article)
-                divColumn.appendChild(divCard);
-                divRow.appendChild(divColumn);
-                favoriteImageSection.append(divRow);
-            });
-        }else{
-            divMessage.style.display = "block";
-            divMessage.classList = "alert alert-danger";
-            divMessage.innerHTML ="You don't have added your favorite dogs. You can do it now!";
-            favoriteImageSection.append(h6);
-        }    
+          renderNextFavorites();
+        } else {
+          divMessage.style.display = "block";
+          divMessage.classList = "alert alert-danger";
+          divMessage.innerHTML =
+            "You don't have added your favorite dogs. You can do it now!";
+          favoriteImageSection.append(h6);
+        }  
     }
 }
+function renderNextFavorites(){
+    const divRow = document.getElementById("favorites-row");
+    const nextItems = allFavorites.slice(currentIndex, currentIndex + pageSize);
+
+    nextItems.forEach((dogFavorite) => {
+        const divColumn = document.createElement("div");
+        divColumn.classList = "col-12 col-xl-3 mx-auto mb-3";
+
+        const divCard = document.createElement("div");
+        divCard.classList = "card shadow p-3";
+
+        const article = document.createElement("article");
+        const img = document.createElement("img");
+        img.alt = dogFavorite.id;
+        img.classList = "rounded skeleton";
+        img.onload = () => img.classList.remove("skeleton");
+        img.src = dogFavorite.image.url;
+
+        const button = document.createElement("button");
+        button.classList = "btn btn-outline-danger mt-3";
+        button.innerHTML = `Remove dog of favorites`;
+        button.onclick = () => deleteDogOfFavorites(dogFavorite.id);
+
+        article.appendChild(img);
+        article.appendChild(button);
+        divCard.appendChild(article);
+        divColumn.appendChild(divCard);
+        divRow.appendChild(divColumn);
+    });
+    currentIndex += pageSize;
+}
+const observer = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    if(currentIndex < allFavorites.length){
+        renderNextFavorites();
+    }
+  }
+});
+observer.observe(document.getElementById("sentinel"));
 async function deleteDogOfFavorites(dogId){
     const res = await fetch(`${API_URL_FAVORITES_DELETE}${dogId}`, {
       method: "DELETE",
