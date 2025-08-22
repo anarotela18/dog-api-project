@@ -55,12 +55,12 @@ async function loadRandomDogImages(){
             const article = document.createElement("article");
 
             const img = document.createElement("img");
-            img.classList = "rounded skeleton";
+            img.classList = "rounded";
             img.alt = dog.id;
 
-            img.onload = () => {
-                img.classList.remove("skeleton");
-            }
+            // img.onload = () => {
+            //     img.classList.remove("skeleton");
+            // }
             img.src = dog.url;
 
             const button = document.createElement("button");
