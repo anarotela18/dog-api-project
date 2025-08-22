@@ -16,7 +16,7 @@ img{
     justify-content: space-between;
 }
 .dog-container--loading{
-    background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75% );
+    background: #EEEAF2;
     border-radius: 8px;
     width: 280px;
     height: 150px;
@@ -28,6 +28,9 @@ img{
     animation-delay: .2s;
 }
 .dog-container--loading:nth-child(3){
+    animation-delay: .3s;
+}
+.dog-container--loading:nth-child(4) {
     animation-delay: .4s;
 }
 @keyframes loading-skeleton{
